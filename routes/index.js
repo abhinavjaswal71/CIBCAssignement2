@@ -1,6 +1,6 @@
 module.exports = {
     getHomePage: (req, res) => {
-        let query = "SELECT * FROM `players` ORDER BY id ASC"; // query database to get all the players
+        let query = "SELECT * FROM `doctors` ORDER BY id ASC"; // query database to get all the doctors
 
         // execute query
         db.query(query, (err, result) => {
@@ -8,8 +8,8 @@ module.exports = {
                 res.redirect('/');
             }
             res.render('index.ejs', {
-                title: "Welcome to Socka | View Players"
-                ,players: result
+                title: "Welcome to Hospital Management | View Doctor"
+                ,doctors: result
             });
         });
     },

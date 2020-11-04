@@ -1,13 +1,13 @@
 const fs = require('fs');
 
 module.exports = {
-    addPlayerPage: (req, res) => {
-        res.render('add-player.ejs', {
-            title: "Welcome to Socka | Add a new player"
+    addDoctorPage: (req, res) => {
+        res.render('add-doctor.ejs', {
+            title: "Welcome to Hospital Management | Add a new Doctor"
             ,message: ''
         });
     },
-    addPlayer: (req, res) => {
+    addDoctor: (req, res) => {
         if (!req.files) {
             return res.status(400).send("No files were uploaded.");
         }
@@ -23,7 +23,7 @@ module.exports = {
         let fileExtension = uploadedFile.mimetype.split('/')[1];
         image_name = username + '.' + fileExtension;
 
-        let usernameQuery = "SELECT * FROM `players` WHERE user_name = '" + username + "'";
+        let usernameQuery = "SELECT * FROM `doctors` WHERE user_name = '" + username + "'";
 
         db.query(usernameQuery, (err, result) => {
             if (err) {
@@ -31,9 +31,9 @@ module.exports = {
             }
             if (result.length > 0) {
                 message = 'Username already exists';
-                res.render('add-player.ejs', {
+                res.render('add-doctor.ejs', {
                     message,
-                    title: "Welcome to Socka | Add a new player"
+                    title: "Welcome to Socka | Add a new doctot"
                 });
             } else {
                 // check the filetype before uploading it
@@ -44,7 +44,7 @@ module.exports = {
                             return res.status(500).send(err);
                         }
                         // send the player's details to the database
-                        let query = "INSERT INTO `players` (first_name, last_name, position, number, image, user_name) VALUES ('" +
+                        let query = "INSERT INTO `doctors` (first_name, last_name, position, number, image, user_name) VALUES ('" +
                             first_name + "', '" + last_name + "', '" + position + "', '" + number + "', '" + image_name + "', '" + username + "')";
                         db.query(query, (err, result) => {
                             if (err) {
@@ -55,7 +55,7 @@ module.exports = {
                     });
                 } else {
                     message = "Invalid File format. Only 'gif', 'jpeg' and 'png' images are allowed.";
-                    res.render('add-player.ejs', {
+                    res.render('add-doctor.ejs', {
                         message,
                         title: "Welcome to Socka | Add a new player"
                     });
@@ -63,28 +63,28 @@ module.exports = {
             }
         });
     },
-    editPlayerPage: (req, res) => {
+    editDoctorPage: (req, res) => {
         let playerId = req.params.id;
-        let query = "SELECT * FROM `players` WHERE id = '" + playerId + "' ";
+        let query = "SELECT * FROM `doctors` WHERE id = '" + playerId + "' ";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
             }
-            res.render('edit-player.ejs', {
-                title: "Edit  Player"
+            res.render('edit-doctor.ejs', {
+                title: "Edit  Doctor"
                 ,player: result[0]
                 ,message: ''
             });
         });
     },
-    editPlayer: (req, res) => {
+    editDoctor: (req, res) => {
         let playerId = req.params.id;
         let first_name = req.body.first_name;
         let last_name = req.body.last_name;
         let position = req.body.position;
         let number = req.body.number;
 
-        let query = "UPDATE `players` SET `first_name` = '" + first_name + "', `last_name` = '" + last_name + "', `position` = '" + position + "', `number` = '" + number + "' WHERE `players`.`id` = '" + playerId + "'";
+        let query = "UPDATE `doctors` SET `first_name` = '" + first_name + "', `last_name` = '" + last_name + "', `position` = '" + position + "', `number` = '" + number + "' WHERE `doctors`.`id` = '" + playerId + "'";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
@@ -92,10 +92,10 @@ module.exports = {
             res.redirect('/');
         });
     },
-    deletePlayer: (req, res) => {
-        let playerId = req.params.id;
-        let getImageQuery = 'SELECT image from `players` WHERE id = "' + playerId + '"';
-        let deleteUserQuery = 'DELETE FROM players WHERE id = "' + playerId + '"';
+    deleteDoctor: (req, res) => {
+        let doctorId = req.params.id;
+        let getImageQuery = 'SELECT image from `doctors` WHERE id = "' + doctorId + '"';
+        let deleteUserQuery = 'DELETE FROM doctors WHERE id = "' + doctorId + '"';
 
         db.query(getImageQuery, (err, result) => {
             if (err) {

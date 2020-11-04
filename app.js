@@ -6,16 +6,17 @@ const path = require('path');
 const app = express();
 
 const {getHomePage} = require('./routes/index');
-const {addPlayerPage, addPlayer, deletePlayer, editPlayer, editPlayerPage} = require('./routes/player');
+const {addDoctorPage, addDoctor, deleteDoctor, editDoctor, editDoctorPage} = require('./routes/Doctor');
+const {addPatientPage, addPatient, deletePatient, editPatient, editPatientPage} = require('./routes/patient');
 const port = 5000;
 
 // create connection to database
 // the mysql.createConnection function takes in a configuration object which contains host, user, password and the database name.
 const db = mysql.createConnection ({
     host: 'localhost',
-    user: 'nodeclient',
+    user: 'nodeclientNew',
     password: '123456',
-    database: 'socka'
+    database: 'HospitalManagement'
 });
 
 // connect to database
@@ -39,11 +40,18 @@ app.use(fileUpload()); // configure fileupload
 // routes for the app
 
 app.get('/', getHomePage);
-app.get('/add', addPlayerPage);
-app.get('/edit/:id', editPlayerPage);
-app.get('/delete/:id', deletePlayer);
-app.post('/add', addPlayer);
-app.post('/edit/:id', editPlayer);
+app.get('/add', addDoctorPage);
+app.get('/edit/:id', editDoctorPage);
+app.get('/delete/:id', deleteDoctor);
+app.post('/add', addDoctor);
+app.post('/edit/:id', editDoctor);
+
+app.get('/', getHomePage);
+app.get('/addPatientPage', addPatientPage);
+app.get('/editPatientPage/:id', editPatientPage);
+app.get('/deletePatient/:id', deletePatient);
+app.post('/addPatient', addPatient);
+app.post('/editDoctor/:id', editPatient);
 
 
 // set the app to listen on the port
